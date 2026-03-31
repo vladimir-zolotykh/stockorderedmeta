@@ -51,8 +51,8 @@ class OrderedMeta(type):
 
 
 class Stock(metaclass=OrderedMeta):
-    name = String()
     shares = Integer()
+    name = String()
     price = Float()
 
     def __init__(self, name, shares, price):
@@ -61,6 +61,11 @@ class Stock(metaclass=OrderedMeta):
         self.price = price
 
     @classmethod
-    def as_csv(cls):
-        for field, value in cls._order:
-            print(f"{field = }, {value = }")
+    def as_csv(cls, obj):
+        return ", ".join(f"{attr}={getattr(obj, attr)}" for attr in cls._order)
+
+
+if __name__ == "__main__":
+    s = Stock("ACME", 50, 91.1)
+    print(Stock._order)
+    print(Stock.as_csv(s))
